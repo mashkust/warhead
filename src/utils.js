@@ -134,60 +134,54 @@ const getText = (
   mkbs,
   msu,
   mdu,
-  mpn
+  mpn,
+  lpn
 ) => {
   const textResult = [
     {
-      name: "Масса ББ",
+      name: "Масса ББ, кг",
       param: mbb,
     },
 
     {
-      name: "Масса КСП",
+      name: "Масса КСП, кг",
       param: mksp,
     },
     {
-      name: "Масса БО",
+      name: "Масса БО, кг",
       param: mbo,
     },
     {
-      name: "Масса платформы",
+      name: "Масса платформы, кг",
       param: mpl,
     },
     {
-      name: "Масса конструкции БС",
+      name: "Масса конструкции БС, кг",
       param: mkbs,
     },
     {
-      name: "Масса СУ",
+      name: "Масса СУ, кг",
       param: msu,
     },
     {
-      name: "Масса ДУ",
+      name: "Масса ДУ, кг",
       param: mdu,
     },
     {
-      name: "Масса ПН",
+      name: "Масса ПН, кг",
       param: mpn,
     },
   ];
-  const graphResult = [
-    {
-      name: "Габариты ББ",
-      param: [lbb, dbb],
-    },
-    {
-      name: "Габариты ТЛЦ",
-      param: [ltlc, dtlc],
-    },
-    {
-      name: "Габариты ГО",
-      param: [],
-    },
-  ];
+  const imgResult = {
+    bb: [lbb, dbb],
+
+    tlc: [ltlc, dtlc],
+
+    pn: [lpn],
+  };
   const result = {
     text: textResult,
-    graph: graphResult,
+    img: imgResult,
   };
   return result;
 };
@@ -223,12 +217,10 @@ export const getParams = (inputFields) => {
   const Ксpl = 0.97 * pow(ΔPф, -0.37);
   const qpl =
     pow(2 / nbb, 1.5) * pow(σr / Ксpl, 3) * pow(log(1 / (1 - P1)), 1.5);
-  console.log(qpl);
 
   //для площадной цели
   const Ксt = 0.78 * pow(Rц, -0.5);
   const qt = pow(M1 / nbb, 1.5) * pow(Δpф / Ксt, 3);
-  console.log(qt);
 
   //Мощность для поражения заданных целей должна быть больше максимально получившейся
   q = qpl > qt ? qpl : qpl;
@@ -238,32 +230,28 @@ export const getParams = (inputFields) => {
   q = 1.5; //Мт
   mbb = 450; //450 кг надо как-то из таблицы достать
 
-  const dbb = 0.37 * sqrt(mbb);
+  const dbb = 0.037 * sqrt(mbb);
   const lbb = 2.5 * dbb;
-  const rnosk = 0.1 * lbb;
+  console.log(lbb);
 
   // const wdubs = 48; //должно как-то задаваться в приближении
   const mksp = 0.25 * mbb;
   const mtlc = (0.8 * mksp) / 2;
   const msm = (0.2 * mksp) / 3;
 
-  const dtlc = 0.37 * sqrt(mtlc);
+  const dtlc = 0.037 * sqrt(mtlc);
   const ltlc = 2.5 * dtlc;
-  const rtlc = 0.1 * ltlc;
+  const lpn = 2 + pow(nbb, 1 / 3) * dbb;
 
   //Масса боевого оснащения
   const mbo = mksp + mbb;
-  console.log(mbo);
 
   // 3.Масса доводочной ДУ и поленой нагрузки
   //масса в начальном приближении
 
   const mpl = 10 * nbb + 0.1 * mbo; //масса платформы
-  console.log(mpl);
   const msu = 95 + 5 * sqrt(nbb); //масса системы управления
-  console.log(msu);
   const mkbs = 45 + 0.06 * mbo; //масса конструкции БС
-  console.log(mkbs);
 
   Lvk = 5.69; //надо как то из таблицы доставать
   //при угле альфа=15
@@ -319,12 +307,24 @@ export const getParams = (inputFields) => {
       mkbs,
       msu,
       mdu,
-      mpn
+      mpn,
+      lpn
     ),
     table: getTable(mpn, wgar, wotvod, mtlc, msm, wbp, mbb, w, tgar, tr, tbp),
   };
   return results;
 };
 
-// export const getDimensions = inputDimensions => {};
+export const getDimensions = (inputDimensions) => {
+  const { pow, sqrt, PI } = Math;
+  const { D, Rскр, l, Pmax, E1, E2, ν12, ν21, ρ } = inputDimensions;
+  const lobr = sqrt(pow(D / 2 - Rскр, 2) + pow(l - Rскр, 2));
+  const b = pow(
+    (3 * sqrt(6) * Pmax * lobr * pow(D / 2, 1.5) * pow(1 - ν12 * ν21, 0.75)) /
+      (2 * PI * pow(E1 * 1000, 0.75) * pow(E2 * 1000, 0.25)),
+    0.4
+  );
+  console.log(lobr);
+  return b;
+};
 export default getParams;

@@ -1,18 +1,20 @@
-import * as React from "react";
-import {
-  FormControl,
-  Typography,
-  Button,
-  Box,
-  RadioGroup,
-  FormLabel,
-  FormControlLabel,
-  Radio,
-} from "@mui/material";
+import React, { useMemo, useState } from "react";
+import { Typography, Button, Box } from "@mui/material";
 import { inputsDimensions, inputsMaterials } from "./templates";
 import FormItem from "../../form-item/form-item";
+import { getDimensions } from "../../../utils";
 
 const DepthResult = ({ inputDepth, setInputDepth }) => {
+  const [isStart, setIsStart] = useState(false);
+
+  const ckickButtonHandler = () => {
+    setIsStart(!isStart);
+  };
+
+  const depth = useMemo(() => {
+    return getDimensions(inputDepth);
+  }, [isStart]);
+
   return (
     <Box
       component="form"
@@ -20,7 +22,6 @@ const DepthResult = ({ inputDepth, setInputDepth }) => {
       justifyContent="start"
       alignItems="start"
       flexDirection="column"
-      margin={2}
       fontWeight={500}
       sx={{
         "& .MuiTextField-root": { m: 1, width: "25ch" },
@@ -29,6 +30,10 @@ const DepthResult = ({ inputDepth, setInputDepth }) => {
       autoComplete="off"
     >
       <Typography variant="h6">Расчет оболочки</Typography>
+      <Typography>
+        Диаметр и длина рассчитаны на основе введенных данных, уточните
+        значения.
+      </Typography>
       {inputsDimensions.map((el) => (
         <FormItem
           label={el.label}
@@ -45,9 +50,12 @@ const DepthResult = ({ inputDepth, setInputDepth }) => {
           setInputFields={setInputDepth}
         />
       ))}
-      <Button width="60px" variant="contained">
+      <Button width="60px" variant="contained" onClick={ckickButtonHandler}>
         Применить
       </Button>
+      <Typography marginTop="10px" fontWeight="600">
+        Толщина ГО {Number(depth).toFixed(2)}мм; масса ГО {"<в разработке>"}.
+      </Typography>
     </Box>
   );
 };
