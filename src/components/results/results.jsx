@@ -8,10 +8,9 @@ import ImgResult from "./img-result/img-result";
 
 const Results = ({ results }) => {
   const [inputDepth, setInputDepth] = useState({
-    D: 1650,
-    l: 2350,
-    Rскр: 100,
-    Pmax: 0.14,
+    D: results.info.dimensions.dpn,
+    lobr: results.info.dimensions.lobr,
+    Pmax: 0.11,
     E1: 48,
     E2: 9.6,
     ν12: 0.25,

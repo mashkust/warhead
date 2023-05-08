@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Typography, Button, Box } from "@mui/material";
 import { inputsDimensions, inputsMaterials } from "./templates";
 import FormItem from "../../form-item/form-item";
-import { getDimensions } from "../../../utils";
+import { getDepth } from "../../../utils";
 
 const DepthResult = ({ inputDepth, setInputDepth }) => {
   const [isStart, setIsStart] = useState(false);
@@ -12,7 +12,7 @@ const DepthResult = ({ inputDepth, setInputDepth }) => {
   };
 
   const depth = useMemo(() => {
-    return getDimensions(inputDepth);
+    return getDepth(inputDepth);
   }, [isStart]);
 
   return (
@@ -54,7 +54,7 @@ const DepthResult = ({ inputDepth, setInputDepth }) => {
         Применить
       </Button>
       <Typography marginTop="10px" fontWeight="600">
-        Толщина ГО {Number(depth).toFixed(2)}мм; масса ГО {"<в разработке>"}.
+        Толщина ГО: {Number(depth).toFixed(2)} мм.
       </Typography>
     </Box>
   );

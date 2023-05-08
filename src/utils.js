@@ -137,6 +137,13 @@ const getText = (
   mpn,
   lpn
 ) => {
+  const { pow, sqrt, ceil } = Math;
+  //прикидываем диаметр ГО
+  const dpn = dbb + 2 * dtlc + 0.2;
+  const lgo = lpn - 1.2;
+  const rgo = 0.1 * dpn;
+  const lobr = sqrt(pow(dpn / 2 - rgo, 2) + pow(lgo - rgo, 2));
+
   const textResult = [
     {
       name: "Масса ББ, кг",
@@ -177,11 +184,19 @@ const getText = (
 
     tlc: [ltlc, dtlc],
 
-    pn: [lpn],
+    pn: [lpn, lpn],
+  };
+  const dimensionsResult = {
+    //в мм
+    dpn: ceil(dpn * 1000),
+    lgo: ceil(lgo * 1000),
+    rgo: ceil(rgo * 1000),
+    lobr: ceil(lobr * 1000),
   };
   const result = {
     text: textResult,
     img: imgResult,
+    dimensions: dimensionsResult,
   };
   return result;
 };
@@ -241,7 +256,7 @@ export const getParams = (inputFields) => {
 
   const dtlc = 0.037 * sqrt(mtlc);
   const ltlc = 2.5 * dtlc;
-  const lpn = 2 + pow(nbb, 1 / 3) * dbb;
+  const lpn = 2.5 + pow(nbb, 1 / 3) * dbb;
 
   //Масса боевого оснащения
   const mbo = mksp + mbb;
@@ -315,16 +330,16 @@ export const getParams = (inputFields) => {
   return results;
 };
 
-export const getDimensions = (inputDimensions) => {
+export const getDepth = (inputDepth) => {
   const { pow, sqrt, PI } = Math;
-  const { D, Rскр, l, Pmax, E1, E2, ν12, ν21, ρ } = inputDimensions;
-  const lobr = sqrt(pow(D / 2 - Rскр, 2) + pow(l - Rскр, 2));
+  const { D, lobr, Pmax, E1, E2, ν12, ν21, ρ } = inputDepth;
+  // const lobr = sqrt(pow(D / 2 - Rскр, 2) + pow(l - Rскр, 2));
   const b = pow(
     (3 * sqrt(6) * Pmax * lobr * pow(D / 2, 1.5) * pow(1 - ν12 * ν21, 0.75)) /
       (2 * PI * pow(E1 * 1000, 0.75) * pow(E2 * 1000, 0.25)),
     0.4
   );
-  console.log(lobr);
+
   return b;
 };
 export default getParams;

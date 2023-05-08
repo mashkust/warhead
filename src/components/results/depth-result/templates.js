@@ -4,12 +4,8 @@ export const inputsDimensions = [
     text: "Диаметр основания ГО, мм",
   },
   {
-    label: "l",
-    text: "Длина ГО, мм",
-  },
-  {
-    label: "Rскр",
-    text: "Радиус скругления ГО, мм",
+    label: "lobr",
+    text: "Длина образующей ГО, мм",
   },
   {
     label: "Pmax",

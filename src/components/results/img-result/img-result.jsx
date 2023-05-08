@@ -16,8 +16,8 @@ const ImgResult = ({ img }) => {
       flexDirection="column"
     >
       <Typography marginTop="20px">
-        Длина ГО {"<в разработке>"}. Построения выполнены в масштабе ... .Эскиз
-        перерисовыввается при измении исходных данных.
+        Длина ГО: {Number(img["pn"][0]).toFixed(3)} м. Эскиз компоновки головной
+        части выполнен в масштабе .
       </Typography>
       <ImgFigure figure={img["tlc"]} />
       <ImgFigure figure={img["bb"]} />

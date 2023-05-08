@@ -24,9 +24,9 @@ const Menu = ({ setIsImg, setIsTable, setIsDepth }) => {
   };
   return (
     <ButtonGroup variant="contained" aria-label="outlined primary button group">
-      <Button onClick={clickTableHandler}>Таблица разделения</Button>
+      <Button onClick={clickTableHandler}>Таблица разведения</Button>
       <Button onClick={clickDepthHandler}>Толщина ГО</Button>
-      <Button onClick={clickImgHandler}>Эскиз ГО</Button>
+      <Button onClick={clickImgHandler}>Компоновка</Button>
       <Button onClick={clickCloseHandler}>
         <CloseOutlinedIcon />
       </Button>
