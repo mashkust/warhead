@@ -9,13 +9,13 @@ function App() {
   const [inputFields, setInputFields] = useState({
     location: true,
     Lmax: 10000,
-    J1: 2350,
-    ΔPф: 20, //20МПа
-    σr: 0.15, //0.15км
+    J1: 2570,
+    ΔPф: 20,
+    σr: 0.15,
     P1: 0.9,
-    Rц: 0.03, //0.03МПа
-    Δpф: 0.9,
-    M1: 5, //5км
+    Rц: 5,
+    Δpф: 0.03,
+    M1: 0.9,
   });
 
   const results = useMemo(() => {

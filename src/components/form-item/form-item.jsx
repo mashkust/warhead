@@ -6,7 +6,7 @@ const FormItem = ({ label, text, inputFields, setInputFields }) => {
     setInputFields((prev) => ({ ...prev, [label]: evt.target.value }));
   };
 
-  console.log(inputFields[label]);
+  // console.log(inputFields[label]);
   return (
     <Box display="flex" width="100%">
       <Typography fontSize="15px" margin=" auto auto auto 0">

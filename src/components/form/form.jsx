@@ -101,7 +101,7 @@ const Form = ({ inputFields, setInputFields, isStart, setIsStart }) => {
           onClick={ckickButtonHandler}
           disabled
         >
-          Сбросить
+          Отчистить
         </Button>
       </Box>
     </Box>

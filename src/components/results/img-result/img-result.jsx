@@ -3,9 +3,9 @@ import { Typography, Box } from "@mui/material";
 import ImgFigure from "./img-figure/img-figure";
 
 const ImgResult = ({ img }) => {
-  const imgParams = useMemo(() => {
-    // return getDimensions();
-  }, []);
+  // const imgParams = useMemo(() => {
+  //   // return getDimensions();
+  // }, []);
   console.log(img["bb"][0]);
 
   return (
@@ -16,8 +16,7 @@ const ImgResult = ({ img }) => {
       flexDirection="column"
     >
       <Typography marginTop="20px">
-        Длина ГО: {Number(img["pn"][0]).toFixed(3)} м. Эскиз компоновки головной
-        части выполнен в масштабе .
+        Эскиз компоновки головной части выполнен в масштабе .
       </Typography>
       <ImgFigure figure={img["tlc"]} />
       <ImgFigure figure={img["bb"]} />

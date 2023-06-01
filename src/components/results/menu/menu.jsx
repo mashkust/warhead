@@ -4,11 +4,12 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import DownloadIcon from "@mui/icons-material/Download";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
-const Menu = ({ setIsImg, setIsTable, setIsDepth }) => {
+const Menu = ({ setIsImg, setIsTable, setIsDepth, setIsSupport }) => {
   const clickCloseHandler = () => {
     setIsTable(false);
     setIsDepth(false);
     setIsImg(false);
+    setIsSupport(false);
   };
   const clickTableHandler = () => {
     clickCloseHandler();
@@ -22,18 +23,22 @@ const Menu = ({ setIsImg, setIsTable, setIsDepth }) => {
     clickCloseHandler();
     setIsImg(true);
   };
+  const clickSupportHandler = () => {
+    clickCloseHandler();
+    setIsSupport(true);
+  };
   return (
     <ButtonGroup variant="contained" aria-label="outlined primary button group">
       <Button onClick={clickTableHandler}>Таблица разведения</Button>
-      <Button onClick={clickDepthHandler}>Толщина ГО</Button>
-      <Button onClick={clickImgHandler}>Компоновка</Button>
+      <Button onClick={clickDepthHandler}>Параметры ГО</Button>
+      <Button onClick={clickImgHandler}>Компоновка ББ</Button>
       <Button onClick={clickCloseHandler}>
         <CloseOutlinedIcon />
       </Button>
       <Button disabled>
         <DownloadIcon />
       </Button>
-      <Button disabled>
+      <Button onClick={clickSupportHandler}>
         <InfoOutlinedIcon />
       </Button>
     </ButtonGroup>

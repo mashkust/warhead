@@ -1,10 +1,15 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Typography, Button, Box } from "@mui/material";
-import { inputsDimensions, inputsMaterials } from "./templates";
+import {
+  inputsDimensions,
+  inputsMaterials,
+  valuesMaterials,
+} from "./templates";
 import FormItem from "../../form-item/form-item";
 import { getDepth } from "../../../utils";
+import Selector from "./selector/selector";
 
-const DepthResult = ({ inputDepth, setInputDepth }) => {
+const DepthResult = ({ inputDepth, setInputDepth, material, setMaterial }) => {
   const [isStart, setIsStart] = useState(false);
 
   const ckickButtonHandler = () => {
@@ -12,7 +17,11 @@ const DepthResult = ({ inputDepth, setInputDepth }) => {
   };
 
   const depth = useMemo(() => {
-    return getDepth(inputDepth);
+    return getDepth(inputDepth).b;
+  }, [isStart]);
+
+  const weight = useMemo(() => {
+    return getDepth(inputDepth).mgo;
   }, [isStart]);
 
   return (
@@ -30,10 +39,17 @@ const DepthResult = ({ inputDepth, setInputDepth }) => {
       autoComplete="off"
     >
       <Typography variant="h6">Расчет оболочки</Typography>
+      <Selector
+        valuesMaterials={valuesMaterials}
+        setInputDepth={setInputDepth}
+        material={material}
+        setMaterial={setMaterial}
+      />
       <Typography>
-        Диаметр и длина рассчитаны на основе введенных данных, уточните
+        Диаметр и длина рассчитаны на основе массового расчета, уточните
         значения.
       </Typography>
+
       {inputsDimensions.map((el) => (
         <FormItem
           label={el.label}
@@ -54,7 +70,8 @@ const DepthResult = ({ inputDepth, setInputDepth }) => {
         Применить
       </Button>
       <Typography marginTop="10px" fontWeight="600">
-        Толщина ГО: {Number(depth).toFixed(2)} мм.
+        Толщина ГО: {Number(depth).toFixed(2)} мм. Масса конической части ГО:{" "}
+        {Number(weight).toFixed(2)}.
       </Typography>
     </Box>
   );

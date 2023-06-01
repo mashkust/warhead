@@ -135,14 +135,16 @@ const getText = (
   msu,
   mdu,
   mpn,
-  lpn
+  lpn,
+  D,
+  m0
 ) => {
   const { pow, sqrt, ceil } = Math;
   //прикидываем диаметр ГО
-  const dpn = dbb + 2 * dtlc + 0.2;
+  // const D = dbb + 2 * dtlc + 0.2;
   const lgo = lpn - 1.2;
-  const rgo = 0.1 * dpn;
-  const lobr = sqrt(pow(dpn / 2 - rgo, 2) + pow(lgo - rgo, 2));
+  const rgo = 0.1 * D;
+  const lobr = sqrt(pow(D / 2 - rgo, 2) + pow(lgo - rgo, 2));
 
   const textResult = [
     {
@@ -178,19 +180,31 @@ const getText = (
       name: "Масса ПН, кг",
       param: mpn,
     },
+    {
+      name: "Диаметр, м",
+      param: D,
+    },
+    {
+      name: "Длина головной части, м",
+      param: lpn,
+    },
+    {
+      name: "Стартовая масса УБР, кг",
+      param: m0,
+    },
   ];
   const imgResult = {
     bb: [lbb, dbb],
 
     tlc: [ltlc, dtlc],
 
-    pn: [lpn, lpn],
+    // pn: [lpn, lpn],
   };
   const dimensionsResult = {
     //в мм
-    dpn: ceil(dpn * 1000),
-    lgo: ceil(lgo * 1000),
-    rgo: ceil(rgo * 1000),
+    D: ceil(D * 1000),
+    // lgo: ceil(lgo * 1000),
+    // rgo: ceil(rgo * 1000),
     lobr: ceil(lobr * 1000),
   };
   const result = {
@@ -203,7 +217,7 @@ const getText = (
 
 export const getParams = (inputFields) => {
   const { location, Lmax, J1, ΔPф, σr, P1, Rц, Δpф, M1 } = inputFields;
-  const { pow, log, sqrt, cos, PI } = Math;
+  const { pow, log, sqrt, cos, PI, exp } = Math;
 
   const nbb = 1; // так как моноблочная
 
@@ -211,7 +225,7 @@ export const getParams = (inputFields) => {
   //для стационарной моноблочной МБР
 
   const Kz = location ? 1.15 : 1.1;
-  // const Kz = 1.15;коэффициента учета затраты масс на защиту УБР от ПФЯВ И ОНФП стационарного базирования
+  // const Kz = 1.15; коэффициента учета затраты масс на защиту УБР от ПФЯВ И ОНФП стационарного базирования
   // const Kz = 1.1; //подвижного базирования
 
   const alfa = 15; //альфа угол 15 градусов
@@ -222,7 +236,6 @@ export const getParams = (inputFields) => {
   const Vv = 10; // 10м/с скоростной интервал для моноблочной УБР
 
   //по таблицам
-  let q;
   let mbb;
   let Lvk;
 
@@ -234,20 +247,23 @@ export const getParams = (inputFields) => {
     pow(2 / nbb, 1.5) * pow(σr / Ксpl, 3) * pow(log(1 / (1 - P1)), 1.5);
 
   //для площадной цели
-  const Ксt = 0.78 * pow(Rц, -0.5);
-  const qt = pow(M1 / nbb, 1.5) * pow(Δpф / Ксt, 3);
+  const Ксt = 0.78 * pow(Δpф, -0.5);
+  const qt = pow(M1 / nbb, 1.5) * pow(Rц / Ксt, 3);
 
   //Мощность для поражения заданных целей должна быть больше максимально получившейся
-  q = qpl > qt ? qpl : qpl;
+  const qmax = qpl > qt ? 0.9 * qpl : 0.9 * qt;
 
   //2.Параметры боевого оснащения
-  //нужно как-то анализировать таблицу
-  q = 1.5; //Мт
-  mbb = 450; //450 кг надо как-то из таблицы достать
+  if (qmax <= 0.1) mbb = 100;
+  if (qmax <= 0.3 && qmax > 0.1) mbb = 135;
+  if (qmax <= 0.5 && qmax > 0.3) mbb = 185;
+  if (qmax <= 0.8 && qmax > 0.5) mbb = 270;
+  if (qmax <= 1 && qmax > 0.8) mbb = 320;
+  if (qmax <= 1.5 && qmax > 1) mbb = 450;
+  if (qmax > 1.5) return; //ошибка
 
   const dbb = 0.037 * sqrt(mbb);
   const lbb = 2.5 * dbb;
-  console.log(lbb);
 
   // const wdubs = 48; //должно как-то задаваться в приближении
   const mksp = 0.25 * mbb;
@@ -268,6 +284,7 @@ export const getParams = (inputFields) => {
   const msu = 95 + 5 * sqrt(nbb); //масса системы управления
   const mkbs = 45 + 0.06 * mbo; //масса конструкции БС
 
+  // if
   Lvk = 5.69; //надо как то из таблицы доставать
   //при угле альфа=15
 
@@ -301,6 +318,15 @@ export const getParams = (inputFields) => {
     }
   }
 
+  //диаметр
+  const Jsr = 1.13 * J1;
+  console.log(J1);
+  const KvVk = 800 * pow(Lmax, 1 / 4);
+  console.log(KvVk);
+  const m0 = 1.65 * mpn * exp(KvVk / Jsr) + 1000 * 0.01 * pow(Lmax, 2 / 3); //стартовая масса ракеты уточни 1,65
+  console.log(m0);
+  const D = 0.52 * pow(m0 / 1000, 1 / 3);
+
   // данные для построения таблицы
   //расход продуктов сгорания и время работы ДУ
   const msec = P / J1; //расход продуктов сгорания
@@ -323,7 +349,9 @@ export const getParams = (inputFields) => {
       msu,
       mdu,
       mpn,
-      lpn
+      lpn,
+      D,
+      m0
     ),
     table: getTable(mpn, wgar, wotvod, mtlc, msm, wbp, mbb, w, tgar, tr, tbp),
   };
@@ -332,14 +360,20 @@ export const getParams = (inputFields) => {
 
 export const getDepth = (inputDepth) => {
   const { pow, sqrt, PI } = Math;
-  const { D, lobr, Pmax, E1, E2, ν12, ν21, ρ } = inputDepth;
-  // const lobr = sqrt(pow(D / 2 - Rскр, 2) + pow(l - Rскр, 2));
+  const { D, lobr, dmin, Pmax, E1, E2, ν12, ν21, ρ } = inputDepth;
   const b = pow(
     (3 * sqrt(6) * Pmax * lobr * pow(D / 2, 1.5) * pow(1 - ν12 * ν21, 0.75)) /
       (2 * PI * pow(E1 * 1000, 0.75) * pow(E2 * 1000, 0.25)),
     0.4
   );
+  const V =
+    (PI / 2) *
+    sqrt(pow(lobr / 1000, 2) - pow((D / 1000 - dmin / 1000) / 2, 2)) *
+    (b / 1000) *
+    (D / 1000 + dmin / 1000 - 2 * (b / 1000));
 
-  return b;
+  const mgo = V * ρ;
+  return { b: b, mgo: mgo };
 };
+
 export default getParams;
