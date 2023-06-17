@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import Menu from "./menu/menu";
 import TableResult from "./table-result/table-result";
@@ -12,13 +12,21 @@ const Results = ({ results }) => {
     D: results.info.dimensions.D,
     lobr: results.info.dimensions.lobr,
     dmin: 0,
-    Pmax: 0.11,
-    E1: 140,
-    E2: 9.6,
-    ν12: 0.33,
-    ν21: 0.023,
+    Pmax: 0.1,
+    E1: 100,
+    E2: 10,
+    ν12: 0.3,
+    ν21: 0.05,
     ρ: 1500,
   });
+
+  useEffect(() => {
+    setInputDepth((prev) => ({
+      ...prev,
+      D: results.info.dimensions.D,
+      lobr: results.info.dimensions.lobr,
+    }));
+  }, [results]);
 
   const [isImg, setIsImg] = useState(false);
   const [isTable, setIsTable] = useState(false);

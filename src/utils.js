@@ -140,8 +140,7 @@ const getText = (
   m0
 ) => {
   const { pow, sqrt, ceil } = Math;
-  //прикидываем диаметр ГО
-  // const D = dbb + 2 * dtlc + 0.2;
+
   const lgo = lpn - 1.2;
   const rgo = 0.1 * D;
   const lobr = sqrt(pow(D / 2 - rgo, 2) + pow(lgo - rgo, 2));
@@ -203,8 +202,6 @@ const getText = (
   const dimensionsResult = {
     //в мм
     D: ceil(D * 1000),
-    // lgo: ceil(lgo * 1000),
-    // rgo: ceil(rgo * 1000),
     lobr: ceil(lobr * 1000),
   };
   const result = {
@@ -221,8 +218,7 @@ export const getParams = (inputFields) => {
 
   const nbb = 1; // так как моноблочная
 
-  //опционально менять потом?
-  //для стационарной моноблочной МБР
+  //для стационарной моноблочной УБР
 
   const Kz = location ? 1.15 : 1.1;
   // const Kz = 1.15; коэффициента учета затраты масс на защиту УБР от ПФЯВ И ОНФП стационарного базирования
@@ -260,7 +256,7 @@ export const getParams = (inputFields) => {
   if (qmax <= 0.8 && qmax > 0.5) mbb = 270;
   if (qmax <= 1 && qmax > 0.8) mbb = 320;
   if (qmax <= 1.5 && qmax > 1) mbb = 450;
-  if (qmax > 1.5) return; //ошибка
+  if (qmax > 1.5) mbb = 450; //ошибка
 
   const dbb = 0.037 * sqrt(mbb);
   const lbb = 2.5 * dbb;
@@ -284,8 +280,14 @@ export const getParams = (inputFields) => {
   const msu = 95 + 5 * sqrt(nbb); //масса системы управления
   const mkbs = 45 + 0.06 * mbo; //масса конструкции БС
 
-  // if
-  Lvk = 5.69; //надо как то из таблицы доставать
+  //  Lvk опционально менять
+  if (Lmax <= 1000) Lvk = 0.46;
+  if (Lmax <= 2500 && Lmax > 1000) Lvk = 0.69;
+  if (Lmax <= 4500 && Lmax > 2500) Lvk = 0.88;
+  if (Lmax <= 6000 && Lmax > 4500) Lvk = 0.97;
+  if (Lmax <= 8000 && Lmax > 6000) Lvk = 4.04;
+  if (Lmax <= 10000 && Lmax > 8000) Lvk = 5.69;
+  if (Lmax > 10000) Lvk = 8;
   //при угле альфа=15
 
   const Lgar = 0.04 * Lmax;
@@ -306,12 +308,8 @@ export const getParams = (inputFields) => {
     wbp = (2 * Vv * (mpn - wgar)) / (J1 * cos((betta * PI) / 180)); //топливо на После построение ТЛЦ и СМ
     wnav = (P / J1) * (toth + tr) + wbp; //запас топлива на наведения бо на цель
 
-    let wdu = wgar + wnav; //расчетная масса топлива
+    const wdu = wgar + wnav; //расчетная масса топлива
 
-    mk = 9.7 * pow(w, 0.33); //масса конструкции двухрежимной доводочной ду
-    mdu = mk + w;
-
-    mpn = Kz * (mbo + mpl + msu + mkbs + mdu);
     if (w - wdu < 1 && w - wdu > 0) {
       //если остается меньше 1 кг топлива в баке
       break;
@@ -359,18 +357,19 @@ export const getParams = (inputFields) => {
 };
 
 export const getDepth = (inputDepth) => {
-  const { pow, sqrt, PI } = Math;
+  const { pow, sqrt, PI, ceil } = Math;
   const { D, lobr, dmin, Pmax, E1, E2, ν12, ν21, ρ } = inputDepth;
   const b = pow(
     (3 * sqrt(6) * Pmax * lobr * pow(D / 2, 1.5) * pow(1 - ν12 * ν21, 0.75)) /
       (2 * PI * pow(E1 * 1000, 0.75) * pow(E2 * 1000, 0.25)),
     0.4
   );
+  const maxB = ceil(b);
   const V =
     (PI / 2) *
     sqrt(pow(lobr / 1000, 2) - pow((D / 1000 - dmin / 1000) / 2, 2)) *
-    (b / 1000) *
-    (D / 1000 + dmin / 1000 - 2 * (b / 1000));
+    (maxB / 1000) *
+    (D / 1000 + dmin / 1000 - 2 * (maxB / 1000));
 
   const mgo = V * ρ;
   return { b: b, mgo: mgo };

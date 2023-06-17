@@ -11,8 +11,8 @@ const Selector = ({
   setMaterial,
 }) => {
   const handleChange = (evt) => {
-    // setMaterial();
     const values = evt.target.value;
+    setMaterial(values);
     setInputDepth((prev) => ({
       ...prev,
       E1: values.E1,
@@ -24,7 +24,7 @@ const Selector = ({
   };
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }}>
+    <FormControl sx={{ m: 1, minWidth: 200 }}>
       <InputLabel> Материал</InputLabel>
       <Select value={material} label="Волокно" onChange={handleChange}>
         {valuesMaterials.map((el) => {

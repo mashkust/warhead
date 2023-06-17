@@ -12,16 +12,20 @@ import Selector from "./selector/selector";
 const DepthResult = ({ inputDepth, setInputDepth, material, setMaterial }) => {
   const [isStart, setIsStart] = useState(false);
 
-  const ckickButtonHandler = () => {
+  const clickButtonHandler = () => {
     setIsStart(!isStart);
   };
 
   const depth = useMemo(() => {
-    return getDepth(inputDepth).b;
+    if (isStart) {
+      return getDepth(inputDepth).b;
+    }
   }, [isStart]);
 
   const weight = useMemo(() => {
-    return getDepth(inputDepth).mgo;
+    if (isStart) {
+      return getDepth(inputDepth).mgo;
+    }
   }, [isStart]);
 
   return (
@@ -66,13 +70,16 @@ const DepthResult = ({ inputDepth, setInputDepth, material, setMaterial }) => {
           setInputFields={setInputDepth}
         />
       ))}
-      <Button width="60px" variant="contained" onClick={ckickButtonHandler}>
-        Применить
+      <Button width="60px" variant="contained" onClick={clickButtonHandler}>
+        {isStart ? "Пересчитать" : "Применить"}
       </Button>
-      <Typography marginTop="10px" fontWeight="600">
-        Толщина ГО: {Number(depth).toFixed(2)} мм. Масса конической части ГО:{" "}
-        {Number(weight).toFixed(2)}.
-      </Typography>
+      {isStart && (
+        <Typography marginTop="10px" fontWeight="600">
+          Толщина ГО: {Number(depth).toFixed(2)} мм, т.е.{" "}
+          {Math.ceil(Number(depth))} мм. Масса конической части ГО:{" "}
+          {Number(weight).toFixed(2)}.
+        </Typography>
+      )}
     </Box>
   );
 };
