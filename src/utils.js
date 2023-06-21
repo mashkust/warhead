@@ -337,11 +337,8 @@ export const getParams = (inputFields) => {
 
   //диаметр
   const Jsr = 1.13 * J1;
-  console.log(J1);
   const KvVk = 800 * pow(Lmax, 1 / 4);
-  console.log(KvVk);
   const m0 = 1.65 * mpn * exp(KvVk / Jsr) + 1000 * 0.01 * pow(Lmax, 2 / 3); //стартовая масса ракеты уточни 1,65
-  console.log(m0);
   const D = 0.52 * pow(m0 / 1000, 1 / 3);
   if (D < 0.5) {
     message = "Требуется проверка - возможна ошибка.";

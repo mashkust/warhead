@@ -19,7 +19,6 @@ function App() {
   });
 
   const results = useMemo(() => {
-    console.log(getParams(inputFields).message);
     return getParams(inputFields);
   }, [isStart]);
 
@@ -35,15 +34,6 @@ function App() {
         />
         <Results results={results} />
       </Box>
-      {/* <Box>
-        <Typography>Посмотри результаты расчета в других форматах</Typography>
-        <Button  variant="contained">
-          Таблица
-        </Button>
-        <Button variant="contained">
-          Схема
-        </Button>
-      </Box> */}
     </Box>
   );
 }
