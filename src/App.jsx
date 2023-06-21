@@ -19,6 +19,7 @@ function App() {
   });
 
   const results = useMemo(() => {
+    console.log(getParams(inputFields).message);
     return getParams(inputFields);
   }, [isStart]);
 
@@ -30,6 +31,7 @@ function App() {
           setInputFields={setInputFields}
           isStart={isStart}
           setIsStart={setIsStart}
+          message={results.message}
         />
         <Results results={results} />
       </Box>

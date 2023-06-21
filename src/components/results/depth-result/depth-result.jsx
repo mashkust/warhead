@@ -53,7 +53,6 @@ const DepthResult = ({ inputDepth, setInputDepth, material, setMaterial }) => {
         Диаметр и длина рассчитаны на основе массового расчета, уточните
         значения.
       </Typography>
-
       {inputsDimensions.map((el) => (
         <FormItem
           label={el.label}

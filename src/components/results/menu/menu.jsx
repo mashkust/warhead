@@ -30,14 +30,14 @@ const Menu = ({ setIsImg, setIsTable, setIsDepth, setIsSupport }) => {
   return (
     <ButtonGroup variant="contained" aria-label="outlined primary button group">
       <Button onClick={clickTableHandler}>Таблица разведения</Button>
-      <Button onClick={clickDepthHandler}>Параметры ГО</Button>
-      <Button onClick={clickImgHandler}>Компоновка БО</Button>
+      <Button onClick={clickDepthHandler}>Толщина ГО</Button>
+      <Button onClick={clickImgHandler}>Габариты БО</Button>
       <Button onClick={clickCloseHandler}>
         <CloseOutlinedIcon />
       </Button>
-      <Button disabled>
+      {/* <Button disabled>
         <DownloadIcon />
-      </Button>
+      </Button> */}
       <Button onClick={clickSupportHandler}>
         <InfoOutlinedIcon />
       </Button>

@@ -196,8 +196,6 @@ const getText = (
     bb: [lbb, dbb],
 
     tlc: [ltlc, dtlc],
-
-    // pn: [lpn, lpn],
   };
   const dimensionsResult = {
     //в мм
@@ -215,6 +213,21 @@ const getText = (
 export const getParams = (inputFields) => {
   const { location, Lmax, J1, ΔPф, σr, P1, Rц, Δpф, M1 } = inputFields;
   const { pow, log, sqrt, cos, PI, exp } = Math;
+  let message;
+
+  if (
+    location <= 0 ||
+    Lmax <= 0 ||
+    J1 <= 0 ||
+    ΔPф <= 0 ||
+    σr <= 0 ||
+    P1 <= 0 ||
+    Rц <= 0 ||
+    Δpф <= 0 ||
+    M1 <= 0
+  ) {
+    message = "Ошибка исходных данных.";
+  }
 
   const nbb = 1; // так как моноблочная
 
@@ -256,7 +269,10 @@ export const getParams = (inputFields) => {
   if (qmax <= 0.8 && qmax > 0.5) mbb = 270;
   if (qmax <= 1 && qmax > 0.8) mbb = 320;
   if (qmax <= 1.5 && qmax > 1) mbb = 450;
-  if (qmax > 1.5) mbb = 450; //ошибка
+  if (qmax > 1.5) {
+    mbb = 450;
+    message = "Неккоректно произведен расчет. Мощность поражения больше 1.5Мт.";
+  }
 
   const dbb = 0.037 * sqrt(mbb);
   const lbb = 2.5 * dbb;
@@ -288,6 +304,10 @@ export const getParams = (inputFields) => {
   if (Lmax <= 8000 && Lmax > 6000) Lvk = 4.04;
   if (Lmax <= 10000 && Lmax > 8000) Lvk = 5.69;
   if (Lmax > 10000) Lvk = 8;
+  if (Lmax > 12000) {
+    Lvk = 8;
+    message = "Неккоректно произведен расчет. Большая дальность.";
+  }
   //при угле альфа=15
 
   const Lgar = 0.04 * Lmax;
@@ -324,8 +344,11 @@ export const getParams = (inputFields) => {
   const m0 = 1.65 * mpn * exp(KvVk / Jsr) + 1000 * 0.01 * pow(Lmax, 2 / 3); //стартовая масса ракеты уточни 1,65
   console.log(m0);
   const D = 0.52 * pow(m0 / 1000, 1 / 3);
+  if (D < 0.3) {
+    message = "Проверь расчет, возможна ошибка.";
+  }
 
-  // данные для построения таблицы
+  //данные для построения таблицы
   //расход продуктов сгорания и время работы ДУ
   const msec = P / J1; //расход продуктов сгорания
   const tres = w / msec; // время работы ду
@@ -352,6 +375,7 @@ export const getParams = (inputFields) => {
       m0
     ),
     table: getTable(mpn, wgar, wotvod, mtlc, msm, wbp, mbb, w, tgar, tr, tbp),
+    message: message,
   };
   return results;
 };

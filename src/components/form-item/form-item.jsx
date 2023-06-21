@@ -6,13 +6,15 @@ const FormItem = ({ label, text, inputFields, setInputFields }) => {
     setInputFields((prev) => ({ ...prev, [label]: evt.target.value }));
   };
 
-  // console.log(inputFields[label]);
   return (
     <Box display="flex" width="100%">
       <Typography fontSize="15px" margin=" auto auto auto 0">
         {text}
       </Typography>
       <TextField
+        InputProps={{
+          inputProps: { min: 0 },
+        }}
         type="number"
         step="1"
         label={label}

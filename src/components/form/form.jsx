@@ -8,6 +8,7 @@ import {
   FormLabel,
   FormControlLabel,
   Radio,
+  Alert,
 } from "@mui/material";
 import {
   inputsGroupBase,
@@ -16,7 +17,13 @@ import {
 } from "./templates";
 import FormItem from "../form-item/form-item";
 
-const Form = ({ inputFields, setInputFields, isStart, setIsStart }) => {
+const Form = ({
+  inputFields,
+  setInputFields,
+  isStart,
+  setIsStart,
+  message,
+}) => {
   const clickRadioHandler = (evt) => {
     let isStatic = true;
     isStatic = evt.target.value === "static" ? true : false;
@@ -95,14 +102,16 @@ const Form = ({ inputFields, setInputFields, isStart, setIsStart }) => {
         >
           Применить
         </Button>
-        <Button
+        <Alert severity="error">{message}</Alert>
+
+        {/* <Button
           width="60px"
           variant="contained"
           onClick={ckickButtonHandler}
           disabled
         >
           Отчистить
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   );
