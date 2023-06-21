@@ -102,16 +102,8 @@ const Form = ({
         >
           Применить
         </Button>
-        <Alert severity="error">{message}</Alert>
 
-        {/* <Button
-          width="60px"
-          variant="contained"
-          onClick={ckickButtonHandler}
-          disabled
-        >
-          Отчистить
-        </Button> */}
+        {message && <Alert severity="error">{message}</Alert>}
       </Box>
     </Box>
   );

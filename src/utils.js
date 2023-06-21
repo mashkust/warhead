@@ -216,7 +216,6 @@ export const getParams = (inputFields) => {
   let message;
 
   if (
-    location <= 0 ||
     Lmax <= 0 ||
     J1 <= 0 ||
     ΔPф <= 0 ||
@@ -304,9 +303,9 @@ export const getParams = (inputFields) => {
   if (Lmax <= 8000 && Lmax > 6000) Lvk = 4.04;
   if (Lmax <= 10000 && Lmax > 8000) Lvk = 5.69;
   if (Lmax > 10000) Lvk = 8;
-  if (Lmax > 12000) {
+  if (Lmax > 13000) {
     Lvk = 8;
-    message = "Неккоректно произведен расчет. Большая дальность.";
+    message = "Требуется проверка - большая дальность.";
   }
   //при угле альфа=15
 
@@ -344,8 +343,8 @@ export const getParams = (inputFields) => {
   const m0 = 1.65 * mpn * exp(KvVk / Jsr) + 1000 * 0.01 * pow(Lmax, 2 / 3); //стартовая масса ракеты уточни 1,65
   console.log(m0);
   const D = 0.52 * pow(m0 / 1000, 1 / 3);
-  if (D < 0.3) {
-    message = "Проверь расчет, возможна ошибка.";
+  if (D < 0.5) {
+    message = "Требуется проверка - возможна ошибка.";
   }
 
   //данные для построения таблицы
