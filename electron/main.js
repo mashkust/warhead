@@ -1,20 +1,15 @@
-// Модули для управления приложением и создания окна
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const url = require("url");
 
 function createWindow() {
-  // Создаем окно браузера.
   const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1400,
+    height: 1000,
     webPreferences: {
       nodeIntegration: true,
     },
   });
-
-  // и загрузить index.html приложения.
-  //mainWindow.loadFile('index.html')
 
   const startUrl =
     process.env.ELECTRON_START_URL ||
@@ -35,7 +30,6 @@ app.whenReady().then(() => {
   });
 });
 
-// Выйти когда все окна закрыты
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") app.quit();
 });
