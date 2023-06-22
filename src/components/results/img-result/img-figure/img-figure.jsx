@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Typography, Box } from "@mui/material";
+import React from "react";
+import { Box } from "@mui/material";
 
 const ImgFigure = ({ figure }) => {
   return (

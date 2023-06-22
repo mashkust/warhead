@@ -270,7 +270,7 @@ export const getParams = (inputFields) => {
   if (qmax <= 1.5 && qmax > 1) mbb = 450;
   if (qmax > 1.5) {
     mbb = 450;
-    message = "Неккоректно произведен расчет. Мощность поражения больше 1.5Мт.";
+    message = "Требуется проверка массы ББ - мощность поражения больше 1.5Мт.";
   }
 
   const dbb = 0.037 * sqrt(mbb);

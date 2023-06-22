@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import { Typography, Button, Box } from "@mui/material";
 import {
   inputsDimensions,

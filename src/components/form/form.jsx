@@ -98,11 +98,10 @@ const Form = ({
           width="60px"
           variant="contained"
           onClick={ckickButtonHandler}
-          sx={{ marginRight: "20px" }}
+          sx={{ marginRight: "20px", maxHeight: "35px" }}
         >
           Применить
         </Button>
-
         {message && <Alert severity="error">{message}</Alert>}
       </Box>
     </Box>

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Typography, Box } from "@mui/material";
 import ImgFigure from "./img-figure/img-figure";
 

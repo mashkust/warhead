@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Button, ButtonGroup } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import DownloadIcon from "@mui/icons-material/Download";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const Menu = ({ setIsImg, setIsTable, setIsDepth, setIsSupport }) => {
@@ -35,9 +34,6 @@ const Menu = ({ setIsImg, setIsTable, setIsDepth, setIsSupport }) => {
       <Button onClick={clickCloseHandler}>
         <CloseOutlinedIcon />
       </Button>
-      {/* <Button disabled>
-        <DownloadIcon />
-      </Button> */}
       <Button onClick={clickSupportHandler}>
         <InfoOutlinedIcon />
       </Button>
